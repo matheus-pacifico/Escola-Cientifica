@@ -1,0 +1,170 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  background-color: #F6F6F6 !important;
+  flex-grow: 1;
+  min-height: calc(100vh - (90px + 145px)); 
+  margin-top: 2%;
+}
+
+@font-face {
+  font-family: OpenSans;
+  src: url(Fonts/OpenSans-SemiBold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: OpenSansMedium;
+  src: url(Fonts/OpenSans-Medium.ttf) format('truetype'); 
+}
+
+.padi {
+  border: 15px;
+  padding-bottom: 15px;
+  border-radius: 25px;
+}
+
+.afastarTopo {
+  margin-top: 1.8%; 
+}
+
+.borda {
+  border-radius: 10px;
+}
+
+.borda-top-left {
+  border-top-left-radius: 10px;
+}
+
+.borda-top-right {
+  border-top-right-radius: 10px;
+}
+
+.borda-bottom-left {
+  border-bottom-left-radius: 10px;
+}
+
+.borda-bottom-right {
+  border-bottom-right-radius: 10px;
+}
+
+.borda-table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+.borda-table tr:last-child td:first-child {
+ border-bottom-left-radius: 10px;
+}
+
+.borda-table tr:last-child {
+  border-color: #F6F6F6;
+}
+
+.bordaM {
+  border-width: 3px !important;
+  color: #FFFFFF;
+}
+
+.navSans { 
+  font-family: 'OpenSans', sans-serif;
+  color: white;
+  text-decoration: none;
+}
+
+.tituloObra {
+
+  color: #32A041;
+}
+
+a.tituloObra:hover {
+  color: #63c771;
+}
+
+.navA {
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+a.navA:hover {
+  color: #FFFFFF;
+}
+
+.navSansMedium {
+  font-family: 'OpenSansMedium';
+  src: url(Fonts/OpenSans-Medium.ttf) format('truetype');
+}
+
+#buscar-input {
+  width: 34%;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: 0;
+  outline: none;
+  box-shadow: none;
+}
+
+#buscar-button {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-color: #DEE2E6;
+  border-left: none;
+}
+
+#buscar-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+#buscar-input:focus {
+  border-color: #32A041;
+}
+
+#buscar-input:focus + button {
+  border-color: #32A041;
+}
+
+#buscar-button:hover{
+  color:#32A041;
+}
+
+.rodape {
+  width: 100%;
+  text-align: center;
+
+}
+
+.fixarRodape {
+  bottom: 0;
+  position: fixed;
+}
+
+.txtVerde {
+  color: #32A041;
+}
+
+.txtBranco {
+  color: #FFFFFF !important;
+}
+
+.bgVerde {
+  background-color: #32A041;
+}
+
+.bgBranco {
+  background-color: #FFFFFF;
+}
+
+.bgCinza {
+  background-color: #F6F6F6;
+}
+
+.bgCinzaEscuro {
+  background-color: #E0E0E0;
+}
