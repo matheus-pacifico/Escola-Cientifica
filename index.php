@@ -14,6 +14,15 @@
   <link rel="stylesheet" href="View/Style/style.css" type="text/css">
   <link rel="shortcut icon" href="View/Images/icone.png">
 </head>
+  	
+<?php
+	require_once("Controller/getObras.php");
+	if(!empty($_GET['q'])) {
+	    $resultado = getSearchedObras($_GET['q']);
+	} else {
+	    $resultado = null;
+	}
+?>
 
 <body class="bgCinza">
   <header>
@@ -40,21 +49,8 @@
   </header>
 
   <main>
-  	
 
-	<?php
-
-		require_once("Controller/getObras.php");
-
-		if(!empty($_GET['q'])) {
-		    $resultado = getSearchedObras($_GET['q']);
-		} else {
-		    $resultado = null;
-		}
-
-	?>
-
-	<div class="box-search d-flex justify-content-center">
+	<div class="box-search d-flex justify-content-center margemb">
 	  <input type="search" class="form-control" name="busca" id="buscar-input" placeholder="Buscar obra">
 	  <button class="btn txtVerde bgBranco" id="buscar-button" onclick="pesquisar()"> 
 	  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -70,15 +66,16 @@
 		       foreach ($resultado->content as $obraObjeto) { 
 		    ?>
 
-	          <div class="col-md-10 col-sm-3 padi">   
+	          <div class="col-md-10 col-sm-3 padi borda">   
 	            <div class="card">
 	              <div class="card-body">
-	                <h5 class="card-title tituloObra"><a class="tituloObra" href="<?php $url . '/{obraObjeto->id}' ?>" action=""><?php echo $obraObjeto->titulo . " "; ?></a></h5>
+	                <h5 class="card-title tituloObra"><a class="tituloObra" href="#" action=""><?php echo $obraObjeto->titulo . " "; ?></a></h5>
 	                <h6 class="card-subtitle mb-2 text-muted">
 	                  <?php 
-	                    echo "IFSN: " . $obraObjeto->ifsn;
-	                    echo "    Área: " . $obraObjeto->area; 
-	                    echo "    Autor(es): "; echo nomeAutoresFormatado($obraObjeto->autores);                  
+	                    echo "IFSN: " . $obraObjeto->ifsn . '<span class="margemDireita"></span>';
+	                    echo "    área: " . $obraObjeto->area . '<span class="margemDireita"></span>'; 
+	                    echo "    autor(es): "; echo nomeAutoresFormatado($obraObjeto->autores) . '<span class="margemDireita"></span>';
+	                    echo "ano: " . $obraObjeto->ano;
 	                  ?>
 	                </h6>
 
@@ -86,8 +83,8 @@
 	                <?php echo $obraObjeto->descricao; ?>
 	              </div>
 
-	              <a href="<?php $_ENV['URL_BASE'] . 'obra/arquivo/download/' . $$obraObjeto->ifsn;?>" class="card-link txtVerde">
-	              	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+	              <a href="<?php echo $_ENV['URL_BASE'] . 'obra/arquivo/download/'. $obraObjeto->ifsn;?>" class="card-link txtVerde">
+	              	<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
                   <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
                   <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
 	              </a>
@@ -117,20 +114,21 @@
 	  </div>
 	</div>
 
-		<script>
-		  let busca = window.document.getElementById("buscar-input");
-		  
-		  busca.addEventListener("keydown", function(event) {
-		    if(event.key ==="Enter") {
-		      pesquisar();
-		    }
-		  });
-
-		  function pesquisar() {
-		    window.location = "index.php?q=" + busca.value;
-		  }
-
-		</script>
   </main>
+
+  <script>
+    let busca = window.document.getElementById("buscar-input");
+    
+    busca.addEventListener("keydown", function(event) {
+      if(event.key ==="Enter") {
+        pesquisar();
+      }
+    });
+
+    function pesquisar() {
+      window.location = "index.php?q=" + busca.value;
+    }
+
+  </script>
 
   <?php include_once("obra/footer.html");?>

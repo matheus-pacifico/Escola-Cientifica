@@ -32,7 +32,7 @@ main {
 }
 
 .borda {
-  border-radius: 10px;
+  border-radius: 10px !important;
 }
 
 .borda-top-left {
@@ -132,6 +132,18 @@ a.navA:hover {
 
 #buscar-button:hover{
   color:#32A041;
+}
+
+.margemb {
+  margin-bottom: 3px;
+}
+
+.margemDireita {
+  margin-right: 1.4%;
+}
+
+.postarO {
+  max-width: 40%;
 }
 
 .rodape {
