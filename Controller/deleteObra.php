@@ -2,11 +2,12 @@
 
 if($_POST['id'] == "") {
 
-  header('Location: ../obra/gerenciarObra.php');
+  header('Location: ../obra/gerenciar.php');
 
 } else {
 
-    $url = $_ENV['URL_BASE'] . "obra/" ."deletar/{$_POST['id']}";
+    $url = require("get_api_url.php");
+    $url = $url . "obra/deletar/{$_POST['id']}";
 
     $ch = require "init_curl.php";
 
@@ -21,13 +22,10 @@ if($_POST['id'] == "") {
     }
 
     $statusc = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-    if($statusc == 200) {
-      echo '<p> Removido</p>';
-    }
 
     curl_close($ch);
 
-    header('Location: ../obra/gerenciarObra.php');
+    header('Location: ../obra/gerenciar.php');
   }
 
 

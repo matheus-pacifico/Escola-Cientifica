@@ -8,7 +8,11 @@ main {
   background-color: #F6F6F6 !important;
   flex-grow: 1;
   min-height: calc(100vh - (90px + 145px)); 
-  margin-top: 2%;
+  margin-top: 1%;
+}
+
+main#gerenciar {
+  margin-top: 0.4%;
 }
 
 @font-face {
@@ -21,7 +25,7 @@ main {
   src: url(Fonts/OpenSans-Medium.ttf) format('truetype'); 
 }
 
-.padi {
+.card-index-search {
   border: 15px;
   padding-bottom: 15px;
   border-radius: 25px;
@@ -35,20 +39,36 @@ main {
   border-radius: 10px !important;
 }
 
+.borda-top-tabela {
+}
+
+#tabelaEdicao {
+  
+  border-width: 10px !important;
+  border-top: ridge;
+  border-color: #000 ;
+
+}
+
 .borda-top-left {
-  border-top-left-radius: 10px;
+  border-top-left-radius: 10px !important;
 }
 
 .borda-top-right {
-  border-top-right-radius: 10px;
+  border-top-right-radius: 10px !important;
 }
 
 .borda-bottom-left {
-  border-bottom-left-radius: 10px;
+  border-bottom-left-radius: 10px !important;
 }
 
 .borda-bottom-right {
-  border-bottom-right-radius: 10px;
+  border-bottom-right-radius: 10px !important;
+}
+
+.borda-table {
+  border: 1px solid lightgray;
+  border-radius: 10px;
 }
 
 .borda-table tr:last-child td:last-child {
@@ -60,12 +80,15 @@ main {
 }
 
 .borda-table tr:last-child {
-  border-color: #F6F6F6;
+  border-bottom: transparent;
 }
 
-.bordaM {
-  border-width: 3px !important;
-  color: #FFFFFF;
+.borda-botao-nav {
+  border-width: 2px !important;
+}
+
+tr#thead-tr {
+  border-bottom: lightgray;
 }
 
 .navSans { 
@@ -75,7 +98,6 @@ main {
 }
 
 .tituloObra {
-
   color: #32A041;
 }
 
@@ -83,9 +105,18 @@ a.tituloObra:hover {
   color: #63c771;
 }
 
+.linkVerde {
+  color: #32A041;
+}
+
+a.linkVerde:hover {
+  color: #63c771;
+}
+
 .navA {
   text-decoration: none;
   color: #FFFFFF;
+  font-size: 1.7em;
 }
 
 a.navA:hover {
@@ -98,12 +129,12 @@ a.navA:hover {
 }
 
 #buscar-input {
-  width: 34%;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   border-right: 0;
+  margin-top: 6px;
   outline: none;
   box-shadow: none;
 }
@@ -114,6 +145,7 @@ a.navA:hover {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   border-color: #DEE2E6;
+  margin-top: 6px;
   border-left: none;
 }
 
@@ -124,6 +156,27 @@ a.navA:hover {
 
 #buscar-input:focus {
   border-color: #32A041;
+}
+
+.maxxxx {
+  max-width: 55%;
+  min-width: 55%;
+}
+
+.menoss {
+  margin-top: -6px;
+}
+
+.margem-bottom {
+  margin-bottom: 20px;
+}
+
+.diminuir-margem-top {
+  margin-top: -5em;
+}
+
+.maiss {
+  margin-top: 12px;
 }
 
 #buscar-input:focus + button {
@@ -142,6 +195,57 @@ a.navA:hover {
   margin-right: 1.4%;
 }
 
+.margemT {
+  margin-top: 10px;
+}
+
+.margem-top-30 {
+  margin-top: 30px;
+}
+
+.sem-margem-bottom {
+  margin-bottom: 0 !important;
+}
+
+.naosei {
+
+
+
+
+
+
+}
+
+.botao-file {
+  background-color: #FFFFFF;
+  color: #32A041;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 1px #32A741 solid;
+  transition: background-color 0.2s;
+}
+
+.botao-file:hover {
+  background-color: rgba(218, 218, 218, 0.4);
+}
+
+.botao-enviar {
+  background-color: #32A041;
+  color: #FFFFFF;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.botao-enviar:hover {
+  background-color: rgba(65, 175, 80, 1);
+}
+
 .postarO {
   max-width: 40%;
 }
@@ -149,12 +253,6 @@ a.navA:hover {
 .rodape {
   width: 100%;
   text-align: center;
-
-}
-
-.fixarRodape {
-  bottom: 0;
-  position: fixed;
 }
 
 .txtVerde {

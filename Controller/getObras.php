@@ -2,11 +2,10 @@
 
 function getAllObras() {
 	$ch = require "init_curl.php";
-	$url = $_ENV['URL_BASE'] . "obra/" . "exibir";
+	$url = require("get_api_url.php");
+	$url = $url . "obra/exibir";
 	curl_setopt($ch, CURLOPT_URL, $url);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	$resultado = json_decode(curl_exec($ch));
-	$ch = curl_init($url);
 	curl_close($ch);
 	return $resultado;
 }
@@ -17,36 +16,55 @@ function nomeAutoresFormatado($autores) {
 			$nomes = "";
 
 			foreach ($autores as $autor) {
-				$nomees = explode(" ", $autor->nome);
-				$lastnome = end($nomees);
-				$first = implode(' ', array_slice($nomees, 0, -1));
-				$nomes .= $lastnome .', '.substr($first,0,1) . '.; ';
+				$nome = explode(" ", $autor->nome);
+				$lastNome = end($nome);
+				$first = implode(' ', array_slice($nome, 0, -1));
+				$nomes .= $lastNome .', '.substr($first,0,1) . '.; ';
 			}
 			$nomes = rtrim($nomes, ' ; ') . '';
 			echo $nomes;
 			
+		} else if(is_array($autores)) {
+			echo $autores[0]->nome; 
 		} else {
-			echo $autores->nome; 
+			echo $autores->nome;
 		}
 
 	}
 
 }
 
+function numeroAutores($autores) {
+	return count($autores);
+}
+
 function getSearchedObras($q) {
 	if($q != "") {
 		$ch = require "init_curl.php";
-		$url = $_ENV['URL_BASE'] . "obra/" . "search?q=" . $q;
+		$url = require("get_api_url.php");
+		$url = $url .  "obra/search?q=" . $q;
 		
 		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		$resultado = json_decode(curl_exec($ch));
-		$ch = curl_init($url);
 		curl_close($ch);
 		return $resultado;
 	}
 
 	return [];
+}
+
+function tituloLimitado($titulo) {
+	if(strlen($titulo > 141)) {
+		return substr($titulo, 0, 146) . "...";
+	} 
+	return $titulo;	
+}
+
+function descricaoLimitada($descricao) {
+	if(strlen($descricao > 261)) {
+		return substr($descricao, 0, 256) . "...";
+	} 
+	return $descricao;
 }
 
 ?>
