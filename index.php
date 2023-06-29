@@ -78,7 +78,8 @@
 	                  <?php 
 	                    echo "IFSN: " . $obraObjeto->ifsn . '<span class="margemDireita"></span>';
 	                    echo "    área: " . $obraObjeto->area . '<span class="margemDireita"></span>'; 
-	                    echo "    autor(es): " . nomeAutoresFormatado($obraObjeto->autores) . '<span class="margemDireita"></span>';
+	                    echo "    autor(es): "; 
+	                    echo nomeAutoresFormatado($obraObjeto->autores) . '<span class="margemDireita"></span>';
 	                    echo "ano: " . $obraObjeto->ano;
 	                  ?>
 	                </h6>

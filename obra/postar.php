@@ -55,8 +55,8 @@
 				</div>
 
 				<div class="mb-2 row">
-					<input type="text" id="nameFile" style="display: none;" name="nome_arquivo"></span>
-					<input type="text" id="pathFile" style="display: none;" name="caminho_arquivo"></span>
+					<input type="text" id="nameFile" style="display: none;" name="nome_arquivo">
+					<input type="text" id="pathFile" style="display: none;" name="caminho_arquivo">
 				</div>
 			
 				<div class="justify-content-center d-flex">

@@ -1,6 +1,7 @@
 <?php
 
-$url = require("get_api_url.php") . "obra/adicionar";
+$url = require("get_api_url.php");
+$url = $url. "obra/adicionar";
 
 $ch = curl_init();
 

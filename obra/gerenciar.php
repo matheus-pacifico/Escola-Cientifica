@@ -11,12 +11,12 @@ include_once("../Controller/getObras.php");
             <table class="table sem-margem-bottom">
                 <thead>
                     <tr id="thead-tr">
-                        <th class="borda-top-left">IFSN </th>
-                        <th>Título </th>
-                        <th>Área </th>
+                        <th class="borda-top-left">IFSN</th>
+                        <th>Título</th>
+                        <th>Área</th>
                         <th>Autores</th>
-                        <th>Ano </th>
-                        <th>Descrição </th>
+                        <th>Ano</th>
+                        <th>Descrição</th>
                         <th class="borda-top-right" style="min-width: 105px;">Ações</th>
                     </tr>           
                 </thead>
@@ -93,7 +93,7 @@ include_once("../Controller/getObras.php");
 
                     <form id="form-edicao" method="POST" action="../Controller/putObra.php">
                         <div class = "form-group">
-                            <input type="hidden" id="form-id">
+                            <input type="hidden" id="form-id" name="id">
                         </div>
 
                         <div class = "form-group">
@@ -138,8 +138,8 @@ include_once("../Controller/getObras.php");
                         </div>
 
                         <div class="mb-2 row">
-                            <input id="nameFile" type="hidden" name="nome_arquivo"></input>
-                            <input id="pathFile" type="hidden" name="caminho_arquivo"></input>
+                            <input id="nameFile" type="hidden" name="nome_arquivo">
+                            <input id="pathFile" type="hidden" name="caminho_arquivo">
                         </div>
                         <button id="button-atualizar" type="submit" hidden="true"></button>
                     </form>

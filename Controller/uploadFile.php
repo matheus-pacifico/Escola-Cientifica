@@ -1,7 +1,8 @@
 <?php 
 $ch = curl_init();
 
-$url = require "get_api_url.php" . "obra/arquivo/upload"; //$_ENV['URL_BASE'];
+$url = require("get_api_url.php");
+$url = $url. "obra/arquivo/upload";
 
 $nomeOriginalArquivo = $_FILES['file']['name'];
 
@@ -15,7 +16,7 @@ $extensoesMIME = [
     'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 ];
 
-$contentType = $extensoesMIME[strtolower($extensaoOriginal)];
+$contentType = $extensoesMIME[strtolower($extensaoArquivo)];
 
 curl_setopt_array($ch, [
   CURLOPT_URL => $url,
