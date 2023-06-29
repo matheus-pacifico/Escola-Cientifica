@@ -28,7 +28,7 @@
   <header>
     <nav class="navbar navbar-dark bgVerde">
       <div class="container-fluid txtBranco">
-        <a class="navbar-brand navSans navA" href="#">
+        <a class="navbar-brand navSans navA" href="index.php">
           <img src="View/Images/icone.png" style="padding-top: 3px;" alt="Logo Escola Científica" width="30" height="33" class="d-inline-block align-text-top">
           Escola Científica
         </a>
@@ -39,7 +39,7 @@
 
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <span><a class="nav-link active txtBranco" href="#">Home</a></span>
+            <span><a class="nav-link active txtBranco" href="index.php">Home</a></span>
             <span><a class="nav-link active txtBranco" href="obra/postar.php">Postar Obra</a></span>
             <span><a class="nav-link active txtBranco" href="obra/gerenciar.php">Gerenciar Obras</a></span>
           </div>
@@ -105,7 +105,7 @@
 	      } else if($resultado != null) { ?>
 
 	    <div style="text-align: center; height: 23em;">
-	      <h2>Nenhum Resultado encontrado!</h2>
+	      <h2>Nenhum resultado encontrado!</h2>
 	    </div>
 
 	    <?php 
