@@ -22,7 +22,7 @@ $(document).ready(function() {
 		fileName = file.name;
 
 		const xhr = new XMLHttpRequest();
-		xhr.open('POST', "../Controller/uploadFile.php", true);
+		xhr.open('POST', "../controller/uploadFile.php", true);
 
 		addUploadingMessage();
 

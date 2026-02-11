@@ -2,7 +2,7 @@
 $ch = curl_init();
 
 $url = require("get_api_url.php");
-$url = $url. "obra/arquivo/upload";
+$url = $url. "obras/arquivo/upload";
 
 $nomeOriginalArquivo = $_FILES['file']['name'];
 

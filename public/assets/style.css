@@ -17,12 +17,12 @@ main#gerenciar {
 
 @font-face {
   font-family: OpenSans;
-  src: url(Fonts/OpenSans-SemiBold.ttf) format('truetype');
+  src: url(fonts/OpenSans-SemiBold.ttf) format('truetype');
 }
 
 @font-face {
   font-family: OpenSansMedium;
-  src: url(Fonts/OpenSans-Medium.ttf) format('truetype'); 
+  src: url(fonts/OpenSans-Medium.ttf) format('truetype'); 
 }
 
 .card-index-search {
@@ -125,7 +125,7 @@ a.navA:hover {
 
 .navSansMedium {
   font-family: 'OpenSansMedium';
-  src: url(Fonts/OpenSans-Medium.ttf) format('truetype');
+  src: url(fonts/OpenSans-Medium.ttf) format('truetype');
 }
 
 #buscar-input {

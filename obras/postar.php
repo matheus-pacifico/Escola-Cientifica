@@ -7,7 +7,7 @@
 
 	<div class="container maiss">
 		<div class="row justify-content-center d-flex">
-			<form class="form-goup col-10 col-md-10 col-sm-10 col-lg-10 col-xl-9" method="POST" action="../Controller/postObra.php">
+			<form class="form-goup col-10 col-md-10 col-sm-10 col-lg-10 col-xl-9" method="POST" action="../controller/postObra.php">
 				<div class="mb-2">
 					<label for="titulo" class="form-label">Título</label>  
 					<input type="text" class="form-control form-control-sm" placeholder="Título" id="titulo" name="titulo" autocomplete="off" required/>
@@ -69,6 +69,6 @@
 
 </main>
 
-<script src="../Controller/uploadArquivo.js"></script>
+<script src="../controller/uploadArquivo.js"></script>
 
 <?php include_once "footer.html";?>

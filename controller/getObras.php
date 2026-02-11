@@ -3,7 +3,7 @@
 function getAllObras() {
 	$ch = require "init_curl.php";
 	$url = require("get_api_url.php");
-	$url = $url . "obra/exibir";
+	$url = $url . "obras/exibir";
 	curl_setopt($ch, CURLOPT_URL, $url);
 	$resultado = json_decode(curl_exec($ch));
 	curl_close($ch);
@@ -42,7 +42,7 @@ function getSearchedObras($q) {
 	if($q != "") {
 		$ch = require "init_curl.php";
 		$url = require("get_api_url.php");
-		$url = $url .  "obra/search?q=" . $q;
+		$url = $url .  "obras/search?q=" . $q;
 		
 		curl_setopt($ch, CURLOPT_URL, $url);
 		$resultado = json_decode(curl_exec($ch));

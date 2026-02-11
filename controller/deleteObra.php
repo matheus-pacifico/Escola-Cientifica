@@ -2,12 +2,12 @@
 
 if($_POST['id'] == "") {
 
-  header('Location: ../obra/gerenciar.php');
+  header('Location: ../obras/gerenciar.php');
 
 } else {
 
     $url = require("get_api_url.php");
-    $url = $url . "obra/deletar/{$_POST['id']}";
+    $url = $url . "obras/deletar/{$_POST['id']}";
 
     $ch = require "init_curl.php";
 
@@ -25,7 +25,7 @@ if($_POST['id'] == "") {
 
     curl_close($ch);
 
-    header('Location: ../obra/gerenciar.php');
+    header('Location: ../obras/gerenciar.php');
   }
 
 

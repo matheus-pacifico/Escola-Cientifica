@@ -1,20 +1,21 @@
 <?php
+
 $url = require("get_api_url.php");
-$url = $url . "obra/atualizar/{$_POST['id']}";
+$url = $url. "obras/adicionar";
 
 $ch = curl_init();
 
-if(isset($_POST['autor1'])) {
-  $autores = [
-    array('id' => $_POST['autor_id'], 'nome' => $_POST['autor']),
-    array('id' => $_POST['autor_id1'], 'nome' => $_POST['autor1'])
-  ];
+if(trim($_POST['autor2']) != "") {
+  $autores = array(
+    array('id' => null, 'nome' => $_POST['autor']),
+    array('id' => null, 'nome' => $_POST['autor2'])
+  );
 } else {
-  $autores = [array('id' => $_POST['autor_id'], 'nome' => $_POST['autor'])];
+  $autores = array(array('id' => null, 'nome' => $_POST['autor']));
 }
 
 $obra = [
-  'id' => $_POST['id'],
+  'id' => null,
   'ifsn' => $_POST['ifsn'],
   'titulo' => $_POST['titulo'],
   'area' => $_POST['area'],
@@ -31,7 +32,7 @@ curl_setopt_array($ch, [
   CURLOPT_URL => $url,
   CURLOPT_SSL_VERIFYPEER => false,
   CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_CUSTOMREQUEST => "PUT",
+  CURLOPT_POST => true,
   CURLOPT_HTTPHEADER => ['Content-Type: application/json', 'Content-Length: ' . strlen($obra)],
   CURLOPT_POSTFIELDS => $obra
 ]);
@@ -40,5 +41,5 @@ curl_exec($ch);
 
 curl_close($ch);
 
-header('location: ../obra/gerenciar.php');
+header('location: ../obras/postar.php');
 ?>

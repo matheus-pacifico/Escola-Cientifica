@@ -6,17 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Escola Científica</title>
 
-  <link rel="stylesheet" href="View/Style/bootstrap-5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="public/assets/bootstrap-5.3.0/css/bootstrap.min.css">
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="View/Style/bootstrap-5.3.0/js/bootstrap.min.js"></script>
+  <script src="public/assets/bootstrap-5.3.0/js/bootstrap.min.js"></script>
 
-  <link rel="stylesheet" href="View/Style/style.css" type="text/css">
-  <link rel="shortcut icon" href="View/Images/icone.png">
+  <link rel="stylesheet" href="public/assets/style.css" type="text/css">
+  <link rel="shortcut icon" href="public/img/icone.png">
 </head>
   	
 <?php
-	require_once("Controller/getObras.php");
+	require_once("controller/getObras.php");
 	if(!empty($_GET['q'])) {
 	    $resultado = getSearchedObras($_GET['q']);
 	} else {
@@ -29,7 +29,7 @@
     <nav class="navbar navbar-dark bgVerde">
       <div class="container-fluid txtBranco">
         <a class="navbar-brand navSans navA" href="index.php">
-          <img src="View/Images/icone.png" style="padding-top: 3px;" alt="Logo Escola Científica" width="30" height="33" class="d-inline-block align-text-top">
+          <img src="public/img/icone.png" style="padding-top: 3px;" alt="Logo Escola Científica" width="30" height="33" class="d-inline-block align-text-top">
           Escola Científica
         </a>
 
@@ -40,8 +40,8 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
             <span><a class="nav-link active txtBranco" href="index.php">Home</a></span>
-            <span><a class="nav-link active txtBranco" href="obra/postar.php">Postar Obra</a></span>
-            <span><a class="nav-link active txtBranco" href="obra/gerenciar.php">Gerenciar Obras</a></span>
+            <span><a class="nav-link active txtBranco" href="obras/postar.php">Postar Obra</a></span>
+            <span><a class="nav-link active txtBranco" href="obras/gerenciar.php">Gerenciar Obras</a></span>
           </div>
         </div>
       </div>
@@ -88,7 +88,7 @@
 	                <?php echo descricaoLimitada($obraObjeto->descricao); ?>
 	              </div>
 
-	              <a href="<?php echo $_ENV['URL_BASE'] . 'obra/arquivo/download/'. $obraObjeto->ifsn;?>" class="card-link txtVerde linkVerde">
+	              <a href="<?php echo $_ENV['URL_BASE'] . 'obras/arquivo/download/'. $obraObjeto->ifsn;?>" class="card-link txtVerde linkVerde">
 	              	<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
                   <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
                   <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
@@ -136,4 +136,4 @@
 
   </script>
 
-  <?php include_once("obra/footer.html");?>
+  <?php include_once("obras/footer.html");?>
