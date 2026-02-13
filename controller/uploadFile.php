@@ -2,21 +2,13 @@
 $ch = curl_init();
 
 $url = require("get_api_url.php");
-$url = $url. "obras/arquivo/upload";
+$url = $url. "arquivo/upload";
 
 $nomeOriginalArquivo = $_FILES['file']['name'];
 
-$extensaoArquivo = pathinfo($nomeOriginalArquivo, PATHINFO_EXTENSION);
-
 $receivedFile = $_FILES['file']['tmp_name'];
 
-$extensoesMIME = [
-    'pdf' => 'application/pdf',
-    'doc' => 'application/msword',
-    'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-];
-
-$contentType = $extensoesMIME[strtolower($extensaoArquivo)];
+$contentType = 'application/pdf';
 
 curl_setopt_array($ch, [
   CURLOPT_URL => $url,
@@ -27,17 +19,18 @@ curl_setopt_array($ch, [
   CURLOPT_POSTFIELDS => ['file' => new CurlFile($receivedFile, $contentType, $nomeOriginalArquivo)]
 ]);
 
-$headers = curl_exec($ch);
+$responsea = curl_exec($ch);
 
 $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-$location = trim(substr(serialize($headers), 105, 22));
+$headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+$headers = substr($responsea, 0, $headerSize);
+$body = substr($responsea, $headerSize);
 
-$response = [
-  'status' => $status,
-  'location' => $location,
-  'message' => "created"
-];
+$location = null;
+if (preg_match('/Location:\s*(.+)/i', $headers, $matches)) {
+    $location = trim($matches[1]);
+}
 
 if(curl_errno($ch)) {
   $response = [
@@ -45,15 +38,19 @@ if(curl_errno($ch)) {
     'location' => null,
     'message' => "Erro ao enviar o arquivo"
   ];
+curl_close($ch);
 } else if($status != 201) {
   $response = [
     'status' => $status,
     'location' => null,
     'message' => "Erro ao enviar o arquivo"
   ];
+} else {
+  $response = [
+  'status' => $status,
+  'location' => $location,
+  'message' => "created"
+];
 }
-
 echo json_encode($response);
-
-curl_close($ch);
 ?>

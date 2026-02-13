@@ -1,16 +1,27 @@
 <?php
 $url = require("get_api_url.php");
-$url = $url . "obras/atualizar/{$_POST['id']}";
+$url = $url . "obra/atualizar";
 
 $ch = curl_init();
+$autor0 = null;
+$autor1 = null;
+$autores = null;
 
-if(isset($_POST['autor1'])) {
-  $autores = [
-    array('id' => $_POST['autor_id'], 'nome' => $_POST['autor']),
-    array('id' => $_POST['autor_id1'], 'nome' => $_POST['autor1'])
-  ];
-} else {
-  $autores = [array('id' => $_POST['autor_id'], 'nome' => $_POST['autor'])];
+if (trim($_POST['autor'] ?? '') != '') {
+  $autor0 = array('id' => $_POST['autor_id'], 'nome' => $_POST['autor']);
+}
+if (trim($_POST['autor1'] ?? '') != '') {
+  $autor1 = array('id' => $_POST['autor_id1'], 'nome' => $_POST['autor1']);
+}
+
+if ($autor0 != null || $autor1 != null) {
+  if ($autor0 == null) {
+    $autores = [$autor1];
+  } else if ($autor1 == null) {
+    $autores = [$autor0];
+  } else {
+    $autores = [$autor0, $autor1];
+  }
 }
 
 $obra = [
@@ -20,8 +31,7 @@ $obra = [
   'area' => $_POST['area'],
   'descricao' => $_POST['descricao'],
   'ano' => (int) $_POST['ano'],
-  'nomeArquivo' => $_POST['nome_arquivo'],
-  'caminhoArquivo' => $_POST['caminho_arquivo'],
+  'fileInfo' => $_POST['info_arquivo'] ?? ' ',
   'autores' => $autores
 ];
 
@@ -40,5 +50,5 @@ curl_exec($ch);
 
 curl_close($ch);
 
-header('location: ../obras/gerenciar.php');
+header('location: ../obras/gerenciar');
 ?>

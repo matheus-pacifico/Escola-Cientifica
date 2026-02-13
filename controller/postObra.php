@@ -1,11 +1,11 @@
 <?php
 
 $url = require("get_api_url.php");
-$url = $url. "obras/adicionar";
+$url = $url. "obra/adicionar";
 
 $ch = curl_init();
 
-if(trim($_POST['autor2']) != "") {
+if(trim($_POST['autor2']) != "" && trim($_POST['autor']) != "") {
   $autores = array(
     array('id' => null, 'nome' => $_POST['autor']),
     array('id' => null, 'nome' => $_POST['autor2'])
@@ -21,12 +21,12 @@ $obra = [
   'area' => $_POST['area'],
   'descricao' => $_POST['descricao'],
   'ano' => (int) $_POST['ano'],
-  'nomeArquivo' => $_POST['nome_arquivo'],
-  'caminhoArquivo' => $_POST['caminho_arquivo'],
+  'fileInfo' => $_POST['info_arquivo'],
+  'professor' => null,
   'autores' => $autores
 ];
 
-$obra = json_encode($obra);
+$obra = json_encode($obra, JSON_UNESCAPED_UNICODE);
 
 curl_setopt_array($ch, [
   CURLOPT_URL => $url,
@@ -41,5 +41,5 @@ curl_exec($ch);
 
 curl_close($ch);
 
-header('location: ../obras/postar.php');
+header('location: ../obras/postar');
 ?>

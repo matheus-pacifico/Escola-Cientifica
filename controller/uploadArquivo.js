@@ -1,11 +1,16 @@
+let stopToggle;
+let showSuccessfulUploadMessage;
+let showFailUploadMessage;
+let setInputsFileInformation;
+
 $(document).ready(function() {
 	const fileInput = document.getElementById('input-arquivo');
 	const statusDoEnvio = document.getElementById('status-do-envio');
 	let fileName = '';
-
+	let token = null;
+    
 	fileInput.addEventListener('change', (event) => {
 		const file = event.target.files[0];
-		
 		if (file) {
 			if(file.size > 10 * 1024 * 1024) {
 				alert('O tamanho máximo do arquivo é de 10 MB. Por favor, selecione um arquivo menor.');
@@ -29,31 +34,29 @@ $(document).ready(function() {
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState === XMLHttpRequest.DONE) {
 				stopToggle();
-				if (xhr.status === 200) {
-					let resposta = JSON.parse(xhr.responseText);
-					if(resposta.status == 201) {
-						const uri = resposta.location;
-						setInputsFileInformation(uri);
-						showSuccessfulUploadMessage();
-					} else {
-						showFailUploadMessage();
-					}
-				} else {
-					showFailUploadMessage();
-				}
+				if (xhr.status !== 200) {
+                    dispatchFailedUploadEvent();
+                    return;
+                }
+                let resposta = JSON.parse(xhr.responseText);
+                if(resposta.status != 201) {
+                    dispatchFailedUploadEvent();
+                    return;
+                } 
+                token = resposta.location;
+                dispatchSuccessUploadEvent();
 			}
 		};
 
+		dispatchUploadingFileEvent();
 		xhr.send(formData);
 	}
 
-	function setInputsFileInformation(uri) {
-		nomeArquivo = document.getElementById('nameFile');
-		caminhoArquivo = document.getElementById('pathFile');
-		nomeArquivo.value = fileName;
-		caminhoArquivo.value = uri;
+	setInputsFileInformation = function(uri) {
+		infoArquivo = document.getElementById('infoFile');
+		infoArquivo.value = uri;
 		fileInput.value = '';
-	}
+	};
 
 	let stopRequested = false;
 	let intervalId = 0;
@@ -75,33 +78,65 @@ $(document).ready(function() {
 		}
 	}
 
-	function stopToggle() {
+	stopToggle = function() {
 		clearInterval(intervalId);
 		stopRequested = true;
-	}
+	};
 
 	function addUploadingMessage() {
+		statusDoEnvio.style.fontSize = '1.2em';
+		statusDoEnvio.style.marginTop = '7px';
 		statusDoEnvio.style.color = '#32A041';
 		statusDoEnvio.textContent = 'Enviando';
+		stopRequested = false;
 		startToggle();
 	}
 
-	function showSuccessfulUploadMessage() {
-		statusDoEnvio.style.fontSize = '1.21em';
-		statusDoEnvio.style.marginTop = '7px';
+	showSuccessfulUploadMessage = function() {
+		statusDoEnvio.style.fontSize = '1em';
+		statusDoEnvio.style.marginTop = '9px';
 		statusDoEnvio.innerHTML = fileName + 
-		'<span style="margin-left: 2px;"> ' + 
+		'<span style="margin-left: 4px;">' + 
 			'<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" ' +
-			'width="22" height="22" viewBox="0 -960 960 960"> ' + 
-				'<path d="M382-231.847 144.616-469.231l60.769-60.768L382-353.384l374.615-374.615 60.769 60.768L382-231.847Z"/> ' +
+			'width="22" height="22" viewBox="0 -960 960 960" style="margin-top:-3px">' + 
+				'<path d="M382-231.847 144.616-469.231l60.769-60.768L382-353.384l374.615-374.615 60.769 60.768L382-231.847Z"/>' +
 			'</svg> ' +
 		'</span>';
 	}
 
-	function showFailUploadMessage() {
-		statusDoEnvio.style.fontSize = '1.35em';
+	showFailUploadMessage = function(resposta) {
+		statusDoEnvio.style.fontSize = '1.2em';
 		statusDoEnvio.style.color = '#DC3545';
-		statusDoEnvio.textContent = 'Erro ao enviar o arquivo.';
-	}
+		statusDoEnvio.textContent = 'Erro ao enviar arquivo';
+	};
 
+    function dispatchSuccessUploadEvent() {
+        const event = new CustomEvent('uploadSuccess', {
+            detail: {
+                message: "Upload successful",
+                file: fileName,
+                uri: token
+            }
+        });
+        document.dispatchEvent(event);
+    }
+    
+    function dispatchUploadingFileEvent() {
+        const event = new CustomEvent('uploadingFile', {
+            detail: {
+                message: "Uploading"
+            }
+        });
+        document.dispatchEvent(event);        
+    }
+    
+    function dispatchFailedUploadEvent() {
+        const event = new CustomEvent('uploadFailed', {
+            detail: {
+                message: "Upload failed"
+            }
+        });
+        document.dispatchEvent(event);
+    }
+    
 });

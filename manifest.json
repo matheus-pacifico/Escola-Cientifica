@@ -1,0 +1,22 @@
+{
+  "name": "Escola Científica",
+  "short_name": "Escola Científica",
+  "description": "Escola Científica é um repositório acadêmico dos trabalhos produzidos no IFMS",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#32A041",
+  "background_color": "#F6F6F6",
+  "display": "standalone",
+  "prompt_message": "Adicione um ícone da página inicial para acesso fácil à Escola Científica"
+}
