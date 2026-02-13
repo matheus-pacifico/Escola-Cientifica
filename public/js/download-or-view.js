@@ -1,11 +1,13 @@
 const pdfState = {
-  loaded: false,
-  loading: false,
+  status: 'idle', // 'idle' | 'loading' | 'loaded' 
   blobUrl: null,
-  iframeHasBeenLoaded: false,
-  failedAttempts: 0,
-  loadingLaunchedByIframe: false
+  failedAttempts: 0
 };
+
+const iframeState = {
+  hasLoaded: false,
+  hasStartedLoading: false
+}
 
 function dispatchPdfLoadingFinished(success = true) {
   const pdfLoadingFinished = new CustomEvent('pdfLoadingFinished', {
@@ -15,21 +17,21 @@ function dispatchPdfLoadingFinished(success = true) {
 }
 
 async function fetchPDF(pdfUrl) {
-  pdfState.loading = true;
+  pdfState.status = 'loading';
   return fetch(pdfUrl)
     .then(response => {
       if (!response.ok) {
-      	pdfState.loading = false;
+      	pdfState.status = 'idle';
         pdfState.failedAttempts++;
-      	throw new Error("error");
+      	throw new Error('error');
       }
       return response.blob();
     })
     .then(blob => {
       pdfState.blobUrl = URL.createObjectURL(blob);
-      pdfState.loaded = !!pdfState.blobUrl;
-      dispatchPdfLoadingFinished(pdfState.loaded);
-      pdfState.loading = false;
+      const loaded = !!pdfState.blobUrl;
+      pdfState.status = loaded ? 'loaded' : 'idle';
+      dispatchPdfLoadingFinished(loaded);
     });
 }
 
@@ -56,7 +58,8 @@ async function toggleViewer() {
     toggleText.textContent = 'Ocultar PDF';
     eyeOpen.classList.remove('active');
     eyeClosed.classList.add('active');
-    loadPDF();
+    scrollWindowToTopOf(document.getElementById('toggleBtn'), 5);
+    initializeIframe();
   } else {
     viewer.style.display = 'none';
     toggleText.textContent = 'Ver Online';
@@ -65,8 +68,7 @@ async function toggleViewer() {
   }
 }
 
-async function loadPDF() {
-  scrollWindowToTopOf(document.getElementById('toggleBtn'), 5);
+async function initializeIframe() {
   if (pdfState.failedAttempts >= 3) {
     return;
   }
@@ -74,13 +76,13 @@ async function loadPDF() {
   const errorLoading = document.getElementById('pdf-loading-error');
   let pdfUrl = '';
   let iframeUrl = '/public/pdfjs/web/viewer.html?file=';
-  if (!pdfState.loaded) {
+  if (pdfState.status !== 'loaded') {
     loading.classList.remove('hidden');
     errorLoading.classList.add('hidden');
     loading.focus();
-    if (pdfState.loading) {
+    if (pdfState.status === 'loading') {
       await tillPdfLoad();
-      if (!pdfState.loaded) {
+      if (pdfState.status !== 'loaded') {
         if (pdfState.failedAttempts >= 3) {
           showErrorLoading(loading, errorLoading);
           return;
@@ -95,28 +97,28 @@ async function loadPDF() {
       }
       pdfUrl = pdfState.blobUrl + '#page=1';
     } else {
-      pdfState.loading = true;
-      pdfState.loadingLaunchedByIframe = true;
+      pdfState.status = 'loading';
+      iframeState.hasStartedLoading = true;
       pdfUrl = pU + '#page=1';
       window.addEventListener('message', setPdfFromIframe);
     }
   }
   iframeUrl = !pdfUrl ? iframeUrl + pU + '#page=1' : iframeUrl + pdfUrl;
-  loadIframe(iframeUrl, loading, errorLoading);
+  mountPdfIframe(iframeUrl, loading, errorLoading);
 }
 
 async function scrollWindowToTopOf(element, marginTop = 0) {
   const distance = element.getBoundingClientRect().top - marginTop;
-  if (distance <= 0) return
+  if (distance <= 0) return;
   window.scrollTo({
       top: (distance + window.scrollY), 
       behavior: 'smooth'
   });
 }
 
-function loadIframe(iframeUrl, loading, errorLoading) {
+function mountPdfIframe(iframeUrl, loading, errorLoading) {
   const iframe = document.getElementById('pdf-iframe');
-  if (pdfState.iframeHasBeenLoaded) {
+  if (iframeState.hasLoaded) {
     iframe.focus();
     return;
   }
@@ -124,61 +126,31 @@ function loadIframe(iframeUrl, loading, errorLoading) {
     showErrorLoading(loading, errorLoading);
     errorLoading.focus();
     dispatchPdfLoadingFinished(false);
-    if (pdfState.loadingLaunchedByIframe) {
-      pdfState.loading=false;
-      pdfState.loadingLaunchedByIframe=false;
+    if (iframeState.hasStartedLoading) {
+      pdfState.status = 'idle';
+      iframeState.hasStartedLoading = false;
     }
-    pdfState.iframeHasBeenLoaded = false;
+    iframeState.hasLoaded = false;
   };
   document.addEventListener('pdfloaded-error', async () => {
     showErrorLoading(loading, errorLoading);
     errorLoading.focus();
     pdfState.failedAttempts++;
     dispatchPdfLoadingFinished(false);
-    if (pdfState.loadingLaunchedByIframe) {
-      pdfState.loading=false;
-      pdfState.loadingLaunchedByIframe=false;
+    if (iframeState.hasStartedLoading) {
+      pdfState.status = 'idle';
+      iframeState.hasStartedLoading = false;
     }
-    pdfState.iframeHasBeenLoaded = false;
+    iframeState.hasLoaded = false;
   }, {once: true});
-  document.addEventListener("pdfloaded", async () => {
+  document.addEventListener('pdfloaded', async () => {
     loading.classList.add('hidden');
     errorLoading.classList.add('hidden');
-    pdfState.iframeHasBeenLoaded = true;
+    iframeState.hasLoaded = true;
     iframe.focus();
   }, {once: true});
   iframe.src = iframeUrl;
 }
-
-/*async function scrollToTop(target, offset, speedDvhPerSecond) {
-  const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
-  const startPosition = window.pageYOffset;
-  const distance = targetPosition - startPosition; 
-
-  if (distance <= 0) { 
-      return;
-  }
-  const viewportHeight = window.innerHeight;
-  const pixelsPerDvh = viewportHeight / 100;
-  const speedPxPerSecond = speedDvhPerSecond * pixelsPerDvh;
-  let duracao = (distance / speedPxPerSecond) * 1000;
-  duracao = Math.min(2000, Math.max(300, duracao));
-
-  let startTime = null;
-  const easingOutQuart = t => 1 - (--t) * t * t * t;
-
-  function animate(currentTime) {
-    if (startTime === null) startTime = currentTime;
-    const timeElapsed = currentTime - startTime;
-    const progress = Math.min(timeElapsed / duracao, 1);
-    const easedProgress = easingOutQuart(progress);
-    window.scrollTo(0, startPosition + (targetPosition - startPosition) * easedProgress);
-    if (timeElapsed < duracao) {
-      requestAnimationFrame(animate);
-    }
-  }
-  requestAnimationFrame(animate);
-}*/
 
 function showErrorLoading(loading, errorLoading) {
   loading.classList.add('hidden');
@@ -190,11 +162,10 @@ function setPdfFromIframe(event) {
     return;
   }
   const ev=event.origin;
-  if (ev !== 'http://<web-site-link> && ev !== 'https://<web-site-link>') return;
+  if (ev !== 'http://<web-site-link>' && ev !== 'https://<web-site-link>') return;
   const pdf = event.data.pdf;
-  pdfState.loading = false;
-  pdfState.loaded = !!pdf;
-  if (!pdfState.loaded) {
+  pdfState.status = !pdf ? 'idle' : 'loaded';
+  if (pdfState.status !== 'loaded') {
     dispatchPdfLoadingFinished(false);
   } else {
     const blob = new Blob([pdf], { type: 'application/pdf' });
@@ -208,17 +179,17 @@ async function downloadPDF() {
   if (pdfState.failedAttempts >= 3) {
     return;
   }
-  const button = document.getElementById("download-btn");
-  const spinner = document.getElementById("spinner-download");
+  const button = document.getElementById('download-btn');
+  const spinner = document.getElementById('spinner-download');
   button.disabled = true;
   button.classList.add('loading');
   spinner.style.display='block';
-  if (!pdfState.loaded) {
-    const errorDownload = document.getElementById("download-error");
+  if (pdfState.status !== 'loaded') {
+    const errorDownload = document.getElementById('download-error');
     errorDownload.style.opacity='0';
-    if (pdfState.loading) {
+    if (pdfState.status === 'loading') {
       await tillPdfLoad();
-      if (!pdfState.loaded && pdfState.failedAttempts >= 3 || !(await couldFetchPdf(pU))) {
+      if (pdfState.status !== 'loaded' && pdfState.failedAttempts >= 3 || !(await couldFetchPdf(pU))) {
         handleDownloadError(button, spinner, errorDownload);
         return;
       }
@@ -258,7 +229,40 @@ function handleDownloadError(button, spinner, errorDownload) {
   }, 2500);
 }
 
-document.addEventListener("webviewerloaded", async () => {
-  let pdfViewerIFrame = document.getElementById("pdf-iframe");
-  pdfViewerIFrame.contentWindow.PDFViewerApplicationOptions.set("viewerCssTheme", 1);
+document.addEventListener('webviewerloaded', async () => {
+  let pdfViewerIFrame = document.getElementById('pdf-iframe');
+  pdfViewerIFrame.contentWindow.PDFViewerApplicationOptions.set('viewerCssTheme', 1);
 });
+
+
+
+/*async function scrollToTop(target, offset, speedDvhPerSecond) {
+  const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+  const startPosition = window.pageYOffset;
+  const distance = targetPosition - startPosition; 
+
+  if (distance <= 0) { 
+      return;
+  }
+  const viewportHeight = window.innerHeight;
+  const pixelsPerDvh = viewportHeight / 100;
+  const speedPxPerSecond = speedDvhPerSecond * pixelsPerDvh;
+  let duracao = (distance / speedPxPerSecond) * 1000;
+  duracao = Math.min(2000, Math.max(300, duracao));
+
+  let startTime = null;
+  const easingOutQuart = t => 1 - (--t) * t * t * t;
+
+  function animate(currentTime) {
+    if (startTime === null) startTime = currentTime;
+    const timeElapsed = currentTime - startTime;
+    const progress = Math.min(timeElapsed / duracao, 1);
+    const easedProgress = easingOutQuart(progress);
+    window.scrollTo(0, startPosition + (targetPosition - startPosition) * easedProgress);
+    if (timeElapsed < duracao) {
+      requestAnimationFrame(animate);
+    }
+  }
+  requestAnimationFrame(animate);
+}*/
+
